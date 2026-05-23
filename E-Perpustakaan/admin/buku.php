@@ -206,34 +206,43 @@ $categories = $pdo->query('SELECT DISTINCT kategori FROM buku ORDER BY kategori 
         <button class="secondary-button" type="submit">Filter</button>
       </form>
       <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead><tr><th>Cover</th><th>Judul</th><th>Kategori</th><th>Tahun</th><th>Stok</th><th>Aksi</th></thead>
-          <tbody>
-            <?php foreach ($books as $book): ?>
-              <tr>
-                <td>
-                  <?php if ($book['cover_buku']): ?>
-                    <img class="admin-cover" src="../<?= htmlspecialchars($book['cover_buku']) ?>" alt="<?= htmlspecialchars($book['judul']) ?>">
-                  <?php else: ?>
-                    <span class="admin-cover fallback"><i class="fa-solid fa-book"></i></span>
-                  <?php endif; ?>
-                </td>
-                <td><strong><?= htmlspecialchars($book['judul']) ?></strong><br><small><?= htmlspecialchars($book['pengarang']) ?></small></td>
-                <td><?= htmlspecialchars($book['kategori']) ?></td>
-                <td><?= htmlspecialchars((string) $book['tahun_terbit']) ?></td>
-                <td><?= htmlspecialchars((string) $book['stok']) ?></td>
-                <td class="admin-actions">
-                  <a href="buku.php?edit=<?= (int) $book['id_buku'] ?>&<?= time() ?>" class="admin-icon edit"><i class="fa-solid fa-pen"></i></a>
-                  <form method="POST" onsubmit="return confirm('Hapus buku ini?')">
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="id_buku" value="<?= (int) $book['id_buku'] ?>">
-                    <button class="admin-icon danger" type="submit"><i class="fa-solid fa-trash"></i></button>
-                  </form>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+          <table class="admin-table">
+              <thead>
+                  <tr>
+                      <th>Cover</th>
+                      <th>Judul</th>
+                      <th>Kategori</th>
+                      <th>Tahun</th>
+                      <th>Stok</th>
+                      <th>Aksi</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($books as $book): ?>
+                <tr>
+<td>
+    <?php if (!empty($book['cover_buku'])): ?>
+        <img class="admin-cover" src="../<?= $book['cover_buku'] ?>?t=<?= time() ?>" width="50" height="60" style="object-fit: cover;" alt="cover">
+    <?php else: ?>
+        <span class="admin-cover fallback"><i class="fa-solid fa-book"></i></span>
+    <?php endif; ?>
+</td>
+                    <td><strong><?= htmlspecialchars($book['judul']) ?></strong><br><small><?= htmlspecialchars($book['pengarang']) ?></small></td>
+                    <td><?= htmlspecialchars($book['kategori']) ?></td>
+                    <td><?= htmlspecialchars((string) $book['tahun_terbit']) ?></td>
+                    <td><?= htmlspecialchars((string) $book['stok']) ?></td>
+                    <td class="admin-actions">
+                        <a href="buku.php?edit=<?= (int) $book['id_buku'] ?>&<?= time() ?>" class="admin-icon edit"><i class="fa-solid fa-pen"></i></a>
+                        <form method="POST" onsubmit="return confirm('Hapus buku ini?')" style="display: inline;">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="id_buku" value="<?= (int) $book['id_buku'] ?>">
+                            <button class="admin-icon danger" type="submit"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+              </tbody>
+          </table>
       </div>
       <div class="admin-pagination">
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
